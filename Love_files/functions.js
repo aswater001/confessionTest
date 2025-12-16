@@ -20,6 +20,10 @@ $(window).resize(function() {
 		this.each(function() {
 			var $ele = $(this), str = $ele.html(), progress = 0;
 			$ele.html('');
+			// find when to show hanging photo (when first line "一定要爱你" appears)
+			var photoText = '一定要爱你';
+			var photoIndex = str.indexOf(photoText);
+			var photoShown = false;
 			var timer = setInterval(function() {
 				var current = str.substr(progress, 1);
 				if (current == '<') {
@@ -28,6 +32,10 @@ $(window).resize(function() {
 					progress++;
 				}
 				$ele.html(str.substring(0, progress) + (progress & 1 ? '_' : ''));
+				if (!photoShown && photoIndex >= 0 && progress >= photoIndex) {
+					photoShown = true;
+					$('#hangingPhoto').addClass('show');
+				}
 				if (progress >= str.length) {
 					clearInterval(timer);
 				}
